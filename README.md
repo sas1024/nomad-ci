@@ -1,6 +1,6 @@
 # Nomad CI image
 
-This image will be useful for deploying Nomad jobs to Gitlab CI or any other..
+This image will be useful for deploying Nomad jobs to Gitlab CI or any other.
 
 ## Gitlab CI Example
 
