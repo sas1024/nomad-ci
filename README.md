@@ -1,51 +1,21 @@
-# Nomad Resource  
+# Nomad CI image
 
-Concourse resource for deploying Nomad jobs using Concourse.
+This image will be useful for deploying Nomad jobs to Gitlab CI or any other..
 
-## Installing
-
-```
-resource_types:
-- name: nomad
-  type: docker-image
-  source:
-    repository: aretelabs/nomad-resource
-resources:
-- name: loadbalancer
-  type: nomad
-  source:
-    url: https://hostname:port
-    name: test
-```
-
-## Source Configuration
-
-* `url`: *Required.* URL to Nomad.
-* `name`: *Required.* Name of Nomad job.
-
-#### `out`: Begins Nomad Deploy Process
-
-Applies a nomad action.
-
-#### Parameters
-* `job_path`: *Required.* Path to file for nomad job.
-
-## Example
-
-### Out
-```
----
-resources:
-- name: loadbalancer
-  type: nomad
-  source:
-    url: https://hostname:port
-    name: test
-```
+## Gitlab CI Example
 
 ```
----
-- put: loadbalancer
-  params:
-    job_path: lb/lb.hcl
+nomad-deploy:
+  cache: {}
+  variables:
+    GIT_STRATEGY: none
+  image: sas1024/nomad-ci
+  stage: deploy
+  script:
+    - CI_NOMAD_JOB=deployments/job.nomad
+    - export NOMAD_ADDR=$NOMAD_NODE
+    - nomad validate $CI_NOMAD_JOB
+    - nomad plan $CI_NOMAD_JOB || if [ $? -eq 255 ]; then exit 255; else echo "success"; fi
+    - nomad run $CI_NOMAD_JOB
+
 ```
