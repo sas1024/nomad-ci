@@ -1,6 +1,6 @@
 FROM alpine:latest
 
-ENV NOMAD_VERSION=0.9.0
+ENV NOMAD_VERSION=0.10.4
 ENV GLIBC_VERSION=2.27-r0
 
 RUN apk add --no-cache --virtual builddeps curl wget unzip
